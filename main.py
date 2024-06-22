@@ -53,6 +53,18 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
                 fingertips = [8, 12, 16, 20]
                 fingerNames = ['IndexFinger', 'MiddleFinger', 'RingFinger', 'PinkyFinger']
 
+                for i, tip in enumerate(fingertips):
+                    finger_tip = (landMarks[tip].x, landMarks[tip].y)
+                    dist = calDist(thumbTip, finger_tip)
+                    if dist < touchThreshold:
+                        touches[fingerNames[i]] = True
+                    else:
+                        touches[fingerNames[i]] = False
+                        
+                for finger, is_touching in touches.items():
+                    if is_touching:
+                        print(f"{finger} finger is touching the thumb.")
+
                 #loop thru the fingertios and see which one touch
         cv2.imshow('hand tracking', image)
 
