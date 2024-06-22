@@ -3,7 +3,7 @@ import mediapipe as mp
 import cv2
 import numpy as np
 import os
-
+from playsound import playsound as ps
 # settng up hand model and stuff to draw the joints
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands #hand model
@@ -62,9 +62,21 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
 
                 handedness = results.multi_handedness[num].classification[0].label
 
-
+                #bruh is there no switch statements in python huh
                 for finger, is_touching in touches.items():
                     if is_touching:
+                        if finger == 'IndexFinger':
+                            ps('piano-c_C_major.wav')
+
+                        elif finger == 'MiddleFinger':
+                            ps('piano-g_G_major.wav')
+
+                        elif finger == 'RingFinger':
+                            ps('piano-f_F_major.wav')
+
+                        elif finger == 'PinkyFinger':
+                            ps('piano-d_D_major.wav')
+                            
                         print(f"{handedness} hand {finger} is touching the thumb.")
                 #loop thru the fingertios and see which one touch
         cv2.imshow('hand tracking', image)
