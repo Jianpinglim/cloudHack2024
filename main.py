@@ -11,7 +11,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands #hand model
 
 #create a touch threshold for how far the finger can be considered as touching
-touchThreshold = 0.03 #change to suit later
+touchThreshold = 0.05 #change to suit later
 #we create a function for calculating the distance
 
 def calDist(p1, p2):
@@ -64,7 +64,7 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
                     else:
                         touches[fingerNames[i]] = False
 
-                handedness = results.multi_handedness[num].classification[0].label
+                handedness = results.multi_handedness[num].classification[0]   .label
 
                 #bruh is there no switch statements in python huh
                 for finger, is_touching in touches.items():
