@@ -9,7 +9,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands #hand model
 
 #create a touch threshold for how far the finger can be considered as touching
-touchThreshold = 0.05 #change to suit later
+touchThreshold = 0.03 #change to suit later
 #we create a function for calculating the distance
 
 def calDist(p1, p2):
@@ -27,7 +27,6 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
         #detecttions
         image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-        image = cv2.flip(image, 1)
         image.flags.writeable = False
         results = hands.process(image)
         image.flags.writeable = True
@@ -60,11 +59,13 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
                         touches[fingerNames[i]] = True
                     else:
                         touches[fingerNames[i]] = False
-                        
+
+                handedness = results.multi_handedness[num].classification[0].label
+
+
                 for finger, is_touching in touches.items():
                     if is_touching:
-                        print(f"{finger} finger is touching the thumb.")
-
+                        print(f"{handedness} hand {finger} is touching the thumb.")
                 #loop thru the fingertios and see which one touch
         cv2.imshow('hand tracking', image)
 
