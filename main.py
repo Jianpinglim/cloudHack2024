@@ -6,7 +6,7 @@ import os
 
 # settng up hand model and stuff to draw the joints
 mp_drawing = mp.solutions.drawing_utils
-mp_hands = mp.solutions.hands #hand model
+mp_hand = mp.solutions.hands #hand model
 
 # init the webcam
 
@@ -22,6 +22,12 @@ with mp.hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
         results = hands.process(image)
         image.flags.writeable = True
         image = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+
+        #time to render the joints!
+        #check if theres any landmarks
+        if results.multi_hand_landmarks: 
+            for num, hand in enumerate(results.multi_hand_landmarks): 
+                mp_drawing.draw_landmarks(image, hand, mp_hand.HAND_CONNECTIONS)
 
 
         cv2.imshow('hand tracking', frame)
