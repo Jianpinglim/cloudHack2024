@@ -9,7 +9,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands #hand model
 
 #create a touch threshold for how far the finger can be considered as touching
-touchThreshold = 0.03 #change to suit later
+touchThreshold = 0.05 #change to suit later
 #we create a function for calculating the distance
 
 def calDist(p1, p2):
