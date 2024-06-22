@@ -1,5 +1,11 @@
 import pygame
 import random
+import mediapipe as mp
+import cv2
+import numpy as np
+import os
+import threading
+
 pygame.init()
 
 SCREEN = pygame.display.set_mode((500, 750))
@@ -20,7 +26,7 @@ def displayPlayer(x, y):
 obs_width = 70
 obs_ht = random.randint(150, 450)
 obs_clr = (211, 253, 117)
-obs_x_change = -6
+obs_x_change = -3
 obs_x = 500
 
 def display_obstacle(height):
@@ -29,6 +35,12 @@ def display_obstacle(height):
 
     pygame.draw.rect(SCREEN, obs_clr, (obs_x, 0, obs_width, top_obs_height))
     pygame.draw.rect(SCREEN, obs_clr, (obs_x, 635 - bottom_obs_height, obs_width, bottom_obs_height))
+
+def collisionDetection(obs_x, obs_ht, playerY, bottom_obs_height):
+    if obs_x >= 50 and obs_x < (50 + 64):
+        if playerY <= obs_ht or playerY >= (bottom_obs_height - 64):
+            return True
+        return False
 
 while running:
     SCREEN.fill((0, 0, 0))
@@ -51,6 +63,10 @@ while running:
         obs_ht = random.randint(200, 400)  # Generate new random height for next obstacle
 
     display_obstacle(obs_ht)
+    collision = collisionDetection(obs_x, obs_ht, playerY, obs_ht + 150)
+
+    if collision:
+        pygame.quit()
 
     displayPlayer(playerX, playerY)
     pygame.display.update()
