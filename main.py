@@ -4,6 +4,8 @@ import cv2
 import numpy as np
 import os
 from playsound import playsound as ps
+import threading
+
 # settng up hand model and stuff to draw the joints
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands #hand model
@@ -15,7 +17,9 @@ touchThreshold = 0.05 #change to suit later
 def calDist(p1, p2):
     return np.linalg.norm(np.array(p1) - np.array(p2))
 
-
+#play the sound in a diff function, thread
+def playSound(file):
+    ps(file)
 # init the webcam
 
 cap = cv2.VideoCapture(0)
@@ -65,21 +69,25 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
                 #bruh is there no switch statements in python huh
                 for finger, is_touching in touches.items():
                     if is_touching:
+                        sound_file = ''
                         if finger == 'IndexFinger':
-                            ps('piano-c_C_major.wav')
+                            sound_file = 'piano-c_C_major.wav'
 
                         elif finger == 'MiddleFinger':
-                            ps('piano-g_G_major.wav')
+                            sound_file = 'piano-g_G_major.wav'
 
                         elif finger == 'RingFinger':
-                            ps('piano-f_F_major.wav')
+                            sound_file = 'piano-f_F_major.wav'
 
                         elif finger == 'PinkyFinger':
-                            ps('piano-d_D_major.wav')
-                            
+                            sound_file = 'piano-d_D_major.wav'
+                        
+                        if sound_file:
+                            threading.Thread(target=playSound, args=(sound_file,)).start() #ty chatgpt
+
                         print(f"{handedness} hand {finger} is touching the thumb.")
                 #loop thru the fingertios and see which one touch
-        cv2.imshow('hand tracking', image)
+        cv2.imshow('piano sellers go bye bye', image)
 
         #quit using q btn
         if cv2.waitKey(10) & 0xFF == ord('q'):
